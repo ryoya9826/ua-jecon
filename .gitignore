@@ -4,7 +4,6 @@
 *.log
 *.out
 *.dvi
-*.pdf
 *.fdb_latexmk
 *.fls
 *.synctex.gz
