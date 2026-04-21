@@ -1,0 +1,141 @@
+\documentclass[uplatex,dvipdfmx,ja = standard,a4paper,11pt]{bxjsarticle}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{ua-jecon}
+\usepackage{url}
+\usepackage{listings,jvlisting}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle={\ttfamily},
+  identifierstyle={\small},
+  commentstyle={\small\itshape},
+  keywordstyle={\small\bfseries},
+  ndkeywordstyle={\small},
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},
+  numbers=left,
+  xrightmargin=0zw,
+  xleftmargin=3zw,
+  numberstyle={\scriptsize},
+  stepnumber=1,
+  numbersep=1zw,
+  lineskip={-5pt}
+}
+
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\title{\texttt{ua-jecon} パッケージ}
+\author{安藤 遼哉（Ryoya Ando）\\\url{https://ryoya9826.github.io/}}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent
+\texttt{ua-jecon.sty} は，経済学用 BibTeX スタイルファイル \texttt{jecon.bst} をベースに，\texttt{arxiv} フィールドの追加や \texttt{amsrefs} 風の出力対応など，いくつかの拡張を加えた\texttt{ua-jecon.bst} を利用するための環境を提供するパッケージです．
+\end{abstract}
+
+\section{ベースとなった作品}
+
+本スタイルファイルは，以下のプロジェクトを改変して作成された派生物です．
+
+\begin{itemize}
+\item \textbf{プロジェクト名:} \texttt{jecon.bst}（経済学用 BibTeX スタイルファイル）
+\item \textbf{原著作者:} 武田 史郎（Shiro Takeda）
+\item \textbf{配布元（GitHub）:} \url{https://github.com/ShiroTakeda/jecon-bst}
+\item \textbf{ベースバージョン:} Version 6.2.1
+\end{itemize}
+
+\section{主な特徴と拡張内容}
+
+\texttt{ua-jecon.bst} は，\texttt{jecon.bst} Version 6.2.1 をベースに以下の変更を加えています．
+
+\begin{itemize}
+\item \textbf{追加フィールド:}
+  \begin{itemize}
+  \item \texttt{arxiv}: arXiv のプレプリント情報を出力するためのフィールドを追加しました．
+  \item \texttt{etranslator}: 翻訳者情報などを柔軟に扱うためのフィールドを追加しました．
+  \item \texttt{label}: ユーザーが明示的に引用ラベルを指定できるフィールドを追加しました．
+  \end{itemize}
+\item \textbf{重複エントリへの対応:}
+  同一著者・同一年のエントリが存在する場合に，自動で \texttt{a, b} などの接尾辞を付与する機能を追加しました．
+\item \textbf{\texttt{amsrefs} 対応:}
+  \texttt{amsrefs} パッケージの出力形式に近い整形を行い，参考文献リストと対になる\textbf{圧縮ラベル}を \texttt{.aux} に書き出します（本文では \verb|\acite| がこれを参照できます）．
+\item \textbf{各種設定の変更:}
+  \begin{itemize}
+  \item \texttt{bysame = 0}
+  \item \texttt{authorname = 2}
+  \item \texttt{number.index = 1}
+  \item \texttt{unicode = 1}
+  \item \texttt{bibhang} などの出力レイアウトの微調整
+  \end{itemize}
+\end{itemize}
+
+\section{ライセンス}
+
+元制作物である \texttt{jecon.bst} と同様に，\LaTeX{} Project Public License (LPPL) version 1.3 以降の下で配布・改変が可能です．
+
+\section{使い方}
+
+本パッケージは，プリアンブルで \texttt{ua-jecon} パッケージを読み込むだけで利用できます．
+内部で自動的に \texttt{natbib} パッケージが読み込まれ，スタイルファイル（\texttt{\textbackslash bibliographystyle\{ua-jecon\}}）や専用コマンド（\verb|\acite|）の定義も行われます．
+
+\textbf{注意}: 日本語の処理を含むため，動作環境は \textbf{up\LaTeX{} + upBibTeX} または \textbf{Lua\LaTeX{}} を想定しています．
+
+\begin{lstlisting}
+\documentclass{article}
+\usepackage{ua-jecon} % パッケージの読み込み（1行のみ）
+
+\begin{document}
+Citing a reference in the text: \cite{example_key}.
+Also you can use \acite{example_key}.
+
+\bibliography{refs}
+\end{document}
+\end{lstlisting}
+
+\noindent
+\textbf{注記}: \texttt{.bib} ファイルの具体的な書き方（日本語著者名のフォーマットや特殊なフィールドの使い方など）に関する細かな要件については，ベースとなった\textbf{オリジナルの \texttt{jecon.bst} のドキュメント（\texttt{jecon-example.pdf} 等）}をご参照ください．
+
+\subsection{\texttt{\textbackslash cite} と \texttt{\textbackslash acite}（本文の引用形式）}
+
+\texttt{natbib} 標準の \verb|\cite| などを用いると，従来どおりの形式で引用できます．
+
+一方，本スタイルでは \textbf{\texttt{amsrefs} パッケージ風のラベル}（例: 著者が Ando， 発行年が2026年であるエントリを \verb|[And26]| と出力する形式）も利用可能です．
+このラベルは \texttt{ua-jecon.bst} が自動生成して \texttt{.aux} ファイルに書き込むため，ユーザーが手動でラベルを定義する必要はありません．
+
+本文中でこの圧縮ラベルを出力するには，\texttt{ua-jecon.sty} で標準提供されている \verb|\acite| コマンドを使用します．
+（\verb|\acite{キー}*{Thm.~1}| のように記述することで，定理番号などの追記も可能です）
+
+\section{出力例}
+
+これは \verb|\acite| の出力例です．また，\texttt{ua-jecon.bst}の追加機能である \texttt{etranslator}, \texttt{arxiv},\texttt{label} フィールドの引用テストも行っています．
+\begin{itemize}
+\item 日本語文献の引用テスト \acite{yamada2024}*{Thm.1}．
+\item 英語文献の引用テスト \acite{smith2023}．
+\item arXiv の引用テスト \acite{arxiv_test2024}．
+\item \texttt{etranslator} の引用テスト \acite{noname1986}．
+\item \texttt{label} の引用テスト \acite{label_test2024}．
+\end{itemize}
+
+\bibliography{refs}
+
+\section{更新履歴}
+
+\begin{description}
+\item[Version 0.7 (2026-04-21)] 重複エントリへの \texttt{a,b} 付与，\texttt{label} フィールドの追加，\texttt{number.index} フォーマットの調整．
+\item[Version 0.6 (2026-04-07)] \texttt{ua-jecon.version} 変数の修正，\verb|\harvarditem| コメントの typo 修正．
+\item[Version 0.5 (2021-12-20)] \texttt{amsrefs} 形式に整形したデータを \texttt{.aux} に書き出し．
+\item[Version 0.4 (2021-08-25)] \texttt{etranslator} フィールドを追加．
+\item[Version 0.3 (2021-08-05)] \texttt{bst.amsrefs} を追加し，\texttt{amsrefs} 形式の出力に対応．
+\item[Version 0.2] ベースを \texttt{jecon.bst} v6.2.1 に更新．
+\item[Version 0.1] \texttt{arxiv} フィールドを追加．
+
+\end{description}
+
+\end{document}
