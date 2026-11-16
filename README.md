@@ -50,6 +50,10 @@ This material is subject to the LaTeX Project Public License, version 1.3c
 or later. The work has the LPPL maintenance status `maintained`; the Current
 Maintainer is Ryoya Ando. As required by the LPPL, `ua-jecon.bst` is renamed
 from `jecon.bst` and its changes are listed in the file header.
+The unmodified original is available at
+<https://github.com/ShiroTakeda/jecon-bst/tree/6.2.1>.
+Shiro Takeda does not provide support for `ua-jecon`; please report issues to
+<https://github.com/ryoya9826/ua-jecon/issues>, not to the original author.
 
 ---
 
@@ -101,6 +105,9 @@ License: [LPPL](https://www.latex-project.org/lppl.txt) version 1.3c 以降
 ## ライセンス
 
 元制作物である `jecon.bst` と同様に，LaTeX Project Public License (LPPL) version 1.3 以降が適用されます．
+
+改変前の `jecon.bst` v6.2.1 は <https://github.com/ShiroTakeda/jecon-bst/tree/6.2.1> から入手できます．
+本パッケージは原作者のサポート対象ではありません．不具合や要望は原作者ではなく <https://github.com/ryoya9826/ua-jecon/issues> にお寄せください．
 
 ## 使用方法
 
