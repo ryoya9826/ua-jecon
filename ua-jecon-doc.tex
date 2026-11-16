@@ -85,6 +85,8 @@
 本パッケージは，プリアンブルで \texttt{ua-jecon} パッケージを読み込むだけで利用できます．
 内部で自動的に \texttt{natbib} パッケージが読み込まれ，スタイルファイル（\texttt{\textbackslash bibliographystyle\{ua-jecon\}}）や専用コマンド（\verb|\acite|）の定義も行われます．
 
+\textbf{注意}: \verb|\bibliographystyle| はパッケージ内で指定済みのため，文書中で再度指定しないでください（BibTeX が二重指定のエラーを出します）．
+
 \textbf{注意}: 日本語の処理を含むため，動作環境は \textbf{up\LaTeX{} + upBibTeX} または \textbf{Lua\LaTeX{}} を想定しています．
 
 \begin{lstlisting}
@@ -123,11 +125,12 @@ Also you can use \acite{example_key}.
 \item \texttt{label} の引用テスト \acite{label_test2024}．
 \end{itemize}
 
-\bibliography{refs}
+\bibliography{ua-jecon-example}
 
 \section{更新履歴}
 
 \begin{description}
+\item[Version 0.7.1 (2026-11-16)] \verb|\acite| の直前に余分な空白が入る不具合を修正．未定義ラベルの警告を追加．CTAN 公開に向けたライセンス表記の整備．サンプル文献ファイルを \texttt{ua-jecon-example.bib} に改名．
 \item[Version 0.7 (2026-04-21)] 重複エントリへの \texttt{a,b} 付与，\texttt{label} フィールドの追加，\texttt{number.index} フォーマットの調整．
 \item[Version 0.6 (2026-04-07)] \texttt{ua-jecon.version} 変数の修正，\verb|\harvarditem| コメントの typo 修正．
 \item[Version 0.5 (2021-12-20)] \texttt{amsrefs} 形式に整形したデータを \texttt{.aux} に書き出し．

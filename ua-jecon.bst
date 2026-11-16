@@ -11,7 +11,10 @@
 % conditions of the LaTeX Project Public License, either version 1.3
 % of this license or (at your option) any later version.
 % The latest version of this license is in
-%   http://www.latex-project.org/lppl.txt
+%   https://www.latex-project.org/lppl.txt
+%
+% This work has the LPPL maintenance status `maintained'.
+% The Current Maintainer of this work (ua-jecon.bst) is Ryoya Ando.
 %
 % [Changes from jecon.bst]
 % - Added fields: arxiv, etranslator, label
@@ -25,6 +28,7 @@
 %     bst.thebibliography.begin (\amsrefregist), punctuation (.bbl footer)
 %
 % [History of ua-jecon.bst]
+% - v0.7.1 (2026/11/16): Add LPPL maintenance status for CTAN release (no functional change).
 % - v0.7 (2026/04/21): Add label field, extra.label suffix for duplicates, adjust number.index format.
 % - v0.6 (2026/04/07): Fix ua-jecon.version variable; Fix typo in \harvarditem comment; Add LPPL declaration.
 % - v0.5 (2021/12/20): Write amsrefs-like formatted data to .aux.
@@ -77,7 +81,7 @@
 
 % version 指定
 FUNCTION {jecon.version} { "6.2.1" }
-FUNCTION {ua-jecon.version} { "0.7" }
+FUNCTION {ua-jecon.version} { "0.7.1" }
 
 % Debug mode．0 以外を指定すると様々な情報を表示させることが可能．
 FUNCTION {jecon.debug}

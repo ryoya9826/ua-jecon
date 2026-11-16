@@ -1,9 +1,65 @@
-# ua-jecon パッケージ
+# ua-jecon
+
+An extended BibTeX style for economics (`ua-jecon.bst`) and its wrapper package (`ua-jecon.sty`).
+
+- Author / Maintainer: Ryoya Ando — <https://ryoya9826.github.io/>
+- Version: 0.7.1 (2026-11-16)
+- License: LaTeX Project Public License (LPPL), version 1.3c or later
+- Repository: <https://github.com/ryoya9826/ua-jecon>
+
+## Description (English)
+
+`ua-jecon.bst` is a derived work of `jecon.bst` (v6.2.1) by Shiro Takeda
+(<https://github.com/ShiroTakeda/jecon-bst>), a BibTeX style for economics
+that handles both Japanese and English references. It adds:
+
+- new fields `arxiv`, `etranslator` and `label`;
+- automatic `a`, `b`, ... suffixes for entries with the same author(s) and year;
+- amsrefs-like compressed labels (e.g. `[And26]`) written to the `.aux` file.
+
+`ua-jecon.sty` loads `natbib`, selects `\bibliographystyle{ua-jecon}` and
+defines `\acite{key}` (and `\acite{key}*{note}`), which prints the compressed
+label. Do not call `\bibliographystyle` again in your document.
+
+Requirements: upLaTeX + upBibTeX, or LuaLaTeX with upBibTeX (for Japanese entries).
+The documentation (`ua-jecon-doc.pdf`) is written in Japanese.
+
+### Files
+
+| File | Description |
+| --- | --- |
+| `ua-jecon.sty` | Wrapper package |
+| `ua-jecon.bst` | BibTeX style |
+| `ua-jecon-doc.tex`, `ua-jecon-doc.pdf` | Documentation (Japanese) and its source |
+| `ua-jecon-example.bib` | Sample database used by the documentation |
+| `README.md` | This file |
+
+To rebuild the documentation:
+
+```
+uplatex ua-jecon-doc
+upbibtex ua-jecon-doc
+uplatex ua-jecon-doc
+uplatex ua-jecon-doc
+dvipdfmx ua-jecon-doc
+```
+
+### License
+
+This material is subject to the LaTeX Project Public License, version 1.3c
+or later. The work has the LPPL maintenance status `maintained`; the Current
+Maintainer is Ryoya Ando. As required by the LPPL, `ua-jecon.bst` is renamed
+from `jecon.bst` and its changes are listed in the file header.
+
+---
+
+# ua-jecon パッケージ（日本語）
+
 
 Author: Ryoya Ando — [https://ryoya9826.github.io/](https://ryoya9826.github.io/)  
-License: [LPPL](https://www.latex-project.org/lppl.txt) version 1.3c  
+License: [LPPL](https://www.latex-project.org/lppl.txt) version 1.3c 以降  
 
-`ua-jecon.bst` は，武田史郎氏によって作成された経済学用 BibTeX スタイルファイル `[jecon.bst](https://github.com/ShiroTakeda/jecon-bst)` (v 6.2.1) をベースに，独自の拡張を加えた派生版です．
+`ua-jecon.bst` は，武田史郎氏によって作成された経済学用 BibTeX スタイルファイル [`jecon.bst`](https://github.com/ShiroTakeda/jecon-bst) (v 6.2.1) をベースに，独自の拡張を加えた派生版です．
 `ua-jecon.sty`は，そちらを利用しやすくするためのパッケージです．
 
 
@@ -48,7 +104,7 @@ License: [LPPL](https://www.latex-project.org/lppl.txt) version 1.3c
 
 ## 使用方法
 
-プリアンブルで `ua-jecon` パッケージを読み込むだけで、必要な設定（`natbib`の読み込み、`\acite`コマンドの定義、`\bibliographystyle{ua-jecon}`の指定）がすべて完了します。
+プリアンブルで `ua-jecon` パッケージを読み込むだけで、必要な設定（`natbib`の読み込み、`\acite`コマンドの定義、`\bibliographystyle{ua-jecon}`の指定）がすべて完了します。`\bibliographystyle` を文書中で再度指定しないでください。
 
 ```latex
 \documentclass{article}
@@ -58,7 +114,7 @@ License: [LPPL](https://www.latex-project.org/lppl.txt) version 1.3c
 \begin{document}
 Citing a reference in the text: \cite{example_key}, \acite{example_key}.
 
-\bibliography{refs} % あなたの .bib ファイル
+\bibliography{refs} % あなたの .bib ファイル（サンプルは ua-jecon-example.bib）
 \end{document}
 ```
 
@@ -72,6 +128,7 @@ Citing a reference in the text: \cite{example_key}, \acite{example_key}.
 
 ## 変更履歴
 
+- Version 0.7.1 (2026-11-16): `\acite` の直前に余分な空白が入る不具合を修正．未定義ラベルの警告を追加．CTAN 公開に向けたライセンス表記の整備．サンプル文献ファイルを `ua-jecon-example.bib` に改名．
 - Version 0.7 (2026-04-21): 重複エントリへの `a,b` 付与，`label` フィールドの追加，`number.index` フォーマットの調整．パッケージとして提供 (`ua-jecon.sty`)．
 - Version 0.6 (2026-04-07): `ua-jecon.version` 変数の修正，`\harvarditem` コメントの typo 修正．
 - Version 0.5 (2021-12-20): `amsrefs` 形式に整形したデータを `.aux` に書き出し．
