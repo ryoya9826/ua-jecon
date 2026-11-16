@@ -6,6 +6,15 @@
 % This file is a derived work from "jecon.bst" (v6.2.1) created by Shiro Takeda.
 % It modifies the original file to add new fields (arxiv, etranslator, label) and
 % output formatting suitable for amsrefs. It also supports resolving duplicate entries.
+% The unmodified original is available at
+%   https://github.com/ShiroTakeda/jecon-bst/tree/6.2.1
+%
+% Copyright (C) 2002-2018 Shiro Takeda (original jecon.bst)
+% Copyright (C) 2021-2026 Ryoya Ando (modifications)
+%
+% Shiro Takeda, the author of the original jecon.bst, does not provide any
+% support for this modified file. Please report bugs and requests about
+% ua-jecon.bst to https://github.com/ryoya9826/ua-jecon/issues only.
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -28,7 +37,9 @@
 %     bst.thebibliography.begin (\amsrefregist), punctuation (.bbl footer)
 %
 % [History of ua-jecon.bst]
-% - v0.7.1 (2026/11/16): Add LPPL maintenance status for CTAN release (no functional change).
+% - v0.7.1 (2026/11/16): Add LPPL maintenance status and copyright notices for CTAN release;
+%   replace the original author's bug-report address with this project's issue tracker
+%   (LPPL 1.3c clause 6c). No functional change.
 % - v0.7 (2026/04/21): Add label field, extra.label suffix for duplicates, adjust number.index format.
 % - v0.6 (2026/04/07): Fix ua-jecon.version variable; Fix typo in \harvarditem comment; Add LPPL declaration.
 % - v0.5 (2021/12/20): Write amsrefs-like formatted data to .aux.
@@ -74,7 +85,10 @@
 % 3) 英語の文献だけでなく、日本語の文献も適切に処理できます。
 % 4) 他の BibTeX 用のスタイルファイルよりも表示形式のカスタマイズが簡単にできます。
 
-% バグ報告、要望は shiro.takeda@gmail.com までお願いします。
+% [ua-jecon による注記] 原版ではここに原作者へのバグ報告先が記載されていましたが，
+% ua-jecon.bst は改変版であり，原作者はそのサポートを行いません．
+% ua-jecon.bst に関するバグ報告・要望は https://github.com/ryoya9826/ua-jecon/issues
+% までお願いします（原作者には問い合わせないでください）．
 
 % 変更履歴については CHANGES.md ファイルを見てください。
 
