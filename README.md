@@ -1,4 +1,4 @@
-# ua-jecon
+# ua-jecon [![CTAN](https://img.shields.io/badge/CTAN-ua--jecon-blue.svg?style=flat-square)](https://ctan.org/pkg/ua-jecon)
 
 An extended BibTeX style for economics (`ua-jecon.bst`) and its wrapper package (`ua-jecon.sty`).
 
