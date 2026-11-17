@@ -5,6 +5,7 @@ An extended BibTeX style for economics (`ua-jecon.bst`) and its wrapper package 
 - Author / Maintainer: Ryoya Ando — <https://ryoya9826.github.io/>
 - Version: 0.7.1 (2026-11-16)
 - License: LaTeX Project Public License (LPPL), version 1.3c or later
+- CTAN: <https://ctan.org/pkg/ua-jecon>
 - Repository: <https://github.com/ryoya9826/ua-jecon>
 
 ## Description (English)
@@ -20,6 +21,10 @@ that handles both Japanese and English references. It adds:
 `ua-jecon.sty` loads `natbib`, selects `\bibliographystyle{ua-jecon}` and
 defines `\acite{key}` (and `\acite{key}*{note}`), which prints the compressed
 label. Do not call `\bibliographystyle` again in your document.
+
+The name stands for upBibTeX + amsrefs: the first version was an adaptation
+of `jecon.bst` for upBibTeX ("u"), and the "a" was added together with the
+amsrefs-like labels.
 
 Requirements: upLaTeX + upBibTeX, or LuaLaTeX with upBibTeX (for Japanese entries).
 The documentation (`ua-jecon-doc.pdf`) is written in Japanese.
@@ -62,10 +67,12 @@ Shiro Takeda does not provide support for `ua-jecon`; please report issues to
 
 Author: Ryoya Ando — [https://ryoya9826.github.io/](https://ryoya9826.github.io/)  
 License: [LPPL](https://www.latex-project.org/lppl.txt) version 1.3c 以降  
+CTAN: [https://ctan.org/pkg/ua-jecon](https://ctan.org/pkg/ua-jecon)  
 
 `ua-jecon.bst` は，武田史郎氏によって作成された経済学用 BibTeX スタイルファイル [`jecon.bst`](https://github.com/ShiroTakeda/jecon-bst) (v 6.2.1) をベースに，独自の拡張を加えた派生版です．
 `ua-jecon.sty`は，そちらを利用しやすくするためのパッケージです．
 
+名前の `ua` は upBibTeX と amsrefs に由来します．最初の版は `jecon.bst` を upBibTeX で使えるようにした改変版で（`u`），amsrefs 風のラベルに対応したときに `a` を加えました．
 
 ## ベースとなったオリジナル作品
 
