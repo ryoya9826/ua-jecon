@@ -39,6 +39,8 @@
 % [History of ua-jecon.bst]
 % - v0.7.2 (2026/11/25): Point the .bbl header to the latest ua-jecon (CTAN/GitHub) instead of
 %   the original jecon.bst page.
+%   Build amsrefs-like labels character by character (amsrefs.prefix), so that any accented
+%   letter (UTF-8 or TeX notation such as {\"o}, {\L}) counts as one character.
 % - v0.7.1 (2026/11/16): Add LPPL maintenance status and copyright notices for CTAN release;
 %   replace the original author's bug-report address with this project's issue tracker
 %   (LPPL 1.3c clause 6c). No functional change.
@@ -3446,95 +3448,169 @@ FUNCTION {format.arxiv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	 \havarditem の出力．
 %%% amsrefsのための拡張
-INTEGERS { amsrefs.cnt amsrefs.tempcnt } 
+INTEGERS { amsrefs.tempcnt }
 
 STRINGS { amsrefs.edited }
 
-STRINGS { umlo umlu umla acce } %ウムラウトとかを判定するための変数
+% 文字列の先頭 n 文字を「文字単位」で取り出すための変数
+INTEGERS { amsrefs.pre.n amsrefs.pre.i amsrefs.pre.depth amsrefs.pre.len }
+STRINGS { amsrefs.pre.s amsrefs.pre.orig amsrefs.pre.out amsrefs.pre.c }
 
-FUNCTION { amsrefs.register }
-{ "ö" #1 #1 substring$ 'umlo := 
-  "ü" #1 #1 substring$ 'umlu := 
-  "ä" #1 #1 substring$ 'umla :=
-  "é" #1 #1 substring$ 'acce :=
+% upBibTeX の substring$ はバイト位置で数えるが，マルチバイト文字の先頭バイトから
+% 1バイト分を取り出すと，その文字全体が返る（TeX Live 2019〜2026 で確認）．
+% ただし文字列の先頭（1バイト目）だけは先頭バイトしか返らない版があるため，
+% amsrefs.prefix では文字列の前にダミーの1文字を付けてから走査する．
+%
+% amsrefs.pre.s の読み取り位置（バイト位置 amsrefs.pre.i）にある1文字を
+% amsrefs.pre.c に，そのバイト数を amsrefs.pre.len に取り出す．
+% 文字列の終端では amsrefs.pre.c は空文字列になる．
+FUNCTION {amsrefs.pre.peek}
+{ amsrefs.pre.s amsrefs.pre.i #1 substring$ 'amsrefs.pre.c :=
+  amsrefs.pre.c text.length$ 'amsrefs.pre.len :=
+  amsrefs.pre.len #1 <
+    { #1 'amsrefs.pre.len := }
+    'skip$
+  if$
 }
 
-FUNCTION { amsrefs.author.chk }
-{ 
-author #1 #1 substring$ umlo =
-	{ #1 'amsrefs.cnt := }
-	{ author #2 #1 substring$ umlo =
-		{ #1 'amsrefs.cnt := }
-		{ author #3 #1 substring$ umlo =
-			{ #1 'amsrefs.cnt := }
-			{ skip$ }
-		if$ }
-	if$ }
-if$  %ここまで１セット
-author #1 #1 substring$ umlu =
-	{ #1 'amsrefs.cnt := }
-	{ author #2 #1 substring$ umlu =
-		{ #1 'amsrefs.cnt := }
-		{ author #3 #1 substring$ umlu =
-			{ #1 'amsrefs.cnt := }
-			{ skip$ }
-		if$ }
-	if$ }
-if$ 
-author #1 #1 substring$ umla =
-	{ #1 'amsrefs.cnt := }
-	{ author #2 #1 substring$ umla =
-		{ #1 'amsrefs.cnt := }
-		{ author #3 #1 substring$ umla =
-			{ #1 'amsrefs.cnt := }
-			{ skip$ }
-		if$ }
-	if$ }
-if$ 
-author #1 #1 substring$ acce =
-	{ #1 'amsrefs.cnt := }
-	{ author #2 #1 substring$ acce =
-		{ #1 'amsrefs.cnt := }
-		{ author #3 #1 substring$ acce =
-			{ #1 'amsrefs.cnt := }
-			{ skip$ }
-		if$ }
-	if$ }
-if$ 
+% amsrefs.pre.c の分だけ読み取り位置を進める．
+FUNCTION {amsrefs.pre.advance}
+{ amsrefs.pre.i amsrefs.pre.len + 'amsrefs.pre.i := }
+
+% {\"o} のような特殊文字（"{\" で始まる波括弧グループ）を，対応する "}" まで
+% まとめて1文字として amsrefs.pre.out に追加する．
+FUNCTION {amsrefs.pre.special}
+{ #0 'amsrefs.pre.depth :=
+  { amsrefs.pre.peek
+    amsrefs.pre.c empty$
+      { #0 }
+      { amsrefs.pre.c "{" =
+          { amsrefs.pre.depth #1 + 'amsrefs.pre.depth := }
+          { amsrefs.pre.c "}" =
+              { amsrefs.pre.depth #1 - 'amsrefs.pre.depth := }
+              'skip$
+            if$
+          }
+        if$
+        amsrefs.pre.out amsrefs.pre.c * 'amsrefs.pre.out :=
+        amsrefs.pre.advance
+        amsrefs.pre.depth #0 >
+      }
+    if$
+  }
+  'skip$
+  while$
 }
 
-FUNCTION { amsrefs.editor.chk }
-{ 
-editor #1 #1 substring$ umlo =
-	{ #1 'amsrefs.cnt := }
-	{ editor #2 #1 substring$ umlo =
-		{ #1 'amsrefs.cnt := }
-		{ editor #3 #1 substring$ umlo =
-			{ #1 'amsrefs.cnt := }
-			{ skip$ }
-		if$ }
-	if$ }
-if$  %ここまで１セット
-editor #1 #1 substring$ umlu =
-	{ #1 'amsrefs.cnt := }
-	{ editor #2 #1 substring$ umlu =
-		{ #1 'amsrefs.cnt := }
-		{ editor #3 #1 substring$ umlu =
-			{ #1 'amsrefs.cnt := }
-			{ skip$ }
-		if$ }
-	if$ }
-if$ 
-editor #1 #1 substring$ acce =
-	{ #1 'amsrefs.cnt := }
-	{ editor #2 #1 substring$ acce =
-		{ #1 'amsrefs.cnt := }
-		{ editor #3 #1 substring$ acce =
-			{ #1 'amsrefs.cnt := }
-			{ skip$ }
-		if$ }
-	if$ }
-if$ 
+% amsrefs.pre.c が ASCII の英字なら 1，そうでなければ 0 を返す．
+FUNCTION {amsrefs.pre.is.letter}
+{ amsrefs.pre.c empty$
+    { #0 }
+    { amsrefs.pre.c chr.to.int$
+      duplicate$ #64 > swap$
+      duplicate$ #91 < swap$
+      duplicate$ #96 > swap$
+      #123 <
+      and 'amsrefs.pre.depth :=
+      and amsrefs.pre.depth or
+    }
+  if$
+}
+
+% 波括弧で囲まれていない制御綴（\L{}, \'s, \"{o}, \ss など）を，引数ごと
+% まとめて1文字として amsrefs.pre.out に追加する．
+FUNCTION {amsrefs.pre.control}
+{ amsrefs.pre.out "\" * 'amsrefs.pre.out :=
+  amsrefs.pre.i #1 + 'amsrefs.pre.i :=
+  amsrefs.pre.peek
+  amsrefs.pre.is.letter
+    { { amsrefs.pre.is.letter }
+      { amsrefs.pre.out amsrefs.pre.c * 'amsrefs.pre.out :=
+        amsrefs.pre.advance
+        amsrefs.pre.peek
+      }
+      while$
+      amsrefs.pre.c empty$
+        { amsrefs.pre.out "{}" * 'amsrefs.pre.out := }
+        { amsrefs.pre.c "{" =
+            'amsrefs.pre.special
+            { amsrefs.pre.out "{}" * 'amsrefs.pre.out := }
+          if$
+        }
+      if$
+    }
+    { amsrefs.pre.c empty$
+        'skip$
+        { amsrefs.pre.out amsrefs.pre.c * 'amsrefs.pre.out :=
+          amsrefs.pre.advance
+          amsrefs.pre.peek
+          amsrefs.pre.c empty$
+            'skip$
+            { amsrefs.pre.c "{" =
+                'amsrefs.pre.special
+                { amsrefs.pre.out amsrefs.pre.c * 'amsrefs.pre.out :=
+                  amsrefs.pre.advance
+                }
+              if$
+            }
+          if$
+        }
+      if$
+    }
+  if$
+}
+
+% 文字列 s と整数 n を受け取り，s の先頭 n 文字を返す．
+%   - アクセント付き文字などのマルチバイト文字（ö, Ł, ś, ễ, ...）は1文字と数える．
+%   - {\"o} や {\L}，\'s のような TeX 記法の特殊文字も1文字と数える．
+%   - それ以外の波括弧（{World Bank} など）は読み飛ばす．
+FUNCTION {amsrefs.prefix}
+{ 'amsrefs.pre.n :=
+  'amsrefs.pre.orig :=
+  "x" amsrefs.pre.orig * 'amsrefs.pre.s :=
+  "" 'amsrefs.pre.out :=
+  #2 'amsrefs.pre.i :=
+  { amsrefs.pre.peek
+    amsrefs.pre.c empty$
+      { #0 }
+      { amsrefs.pre.n #0 > }
+    if$
+  }
+  { amsrefs.pre.c "{" =
+      { amsrefs.pre.s amsrefs.pre.i #1 + #1 substring$ "\" =
+          { amsrefs.pre.special
+            amsrefs.pre.n #1 - 'amsrefs.pre.n :=
+          }
+          { amsrefs.pre.i #1 + 'amsrefs.pre.i := }
+        if$
+      }
+      { amsrefs.pre.c "}" =
+          { amsrefs.pre.i #1 + 'amsrefs.pre.i := }
+          { amsrefs.pre.c "\" =
+              { amsrefs.pre.control
+                amsrefs.pre.n #1 - 'amsrefs.pre.n :=
+              }
+              { amsrefs.pre.s amsrefs.pre.i amsrefs.pre.len substring$ amsrefs.pre.c = not
+                  { % 同じ位置からバイト数を指定して取り直した結果が一致しない場合は，
+                    % substring$ がマルチバイト文字を正しく扱えない版（TeX Live 2018
+                    % 以前の upBibTeX で確認）なので，先頭4バイトを返して打ち切る．
+                    amsrefs.pre.orig #1 #4 substring$ 'amsrefs.pre.out :=
+                    #0 'amsrefs.pre.n :=
+                  }
+                  { amsrefs.pre.out amsrefs.pre.c * 'amsrefs.pre.out :=
+                    amsrefs.pre.advance
+                    amsrefs.pre.n #1 - 'amsrefs.pre.n :=
+                  }
+                if$
+              }
+            if$
+          }
+        if$
+      }
+    if$
+  }
+  while$
+  amsrefs.pre.out
 }
 
 FUNCTION {amsrefs.edit}
@@ -3554,11 +3630,7 @@ author empty$
 			while$ }
 		if$ } 
 		{ editor num.names$ #1 =
-			{ amsrefs.editor.chk 
-			amsrefs.cnt #0 =
-				{ editor #1 "{}{}{ll}{}" format.name$ #1 #3 substring$ }
-				{ editor #1 "{}{}{ll}{}" format.name$ #1 #4 substring$ }
-			if$ } %１人
+			{ editor #1 "{}{}{ll}{}" format.name$ #3 amsrefs.prefix } %１人
 			{ #1 'amsrefs.tempcnt :=
 				""
 				{ amsrefs.tempcnt editor num.names$ #1 + < amsrefs.tempcnt #4 < and }
@@ -3582,11 +3654,7 @@ author empty$
 			while$ }
 		if$ } 
 		{ author num.names$ #1 =
-			{ amsrefs.author.chk 
-			amsrefs.cnt #0 =
-				{ author #1 "{}{}{ll}{}" format.name$ #1 #3 substring$ }
-				{ author #1 "{}{}{ll}{}" format.name$ #1 #4 substring$ }
-			if$ } %１人
+			{ author #1 "{}{}{ll}{}" format.name$ #3 amsrefs.prefix } %１人
 			{ #1 'amsrefs.tempcnt :=
 				""
 				{ amsrefs.tempcnt author num.names$ #1 + < amsrefs.tempcnt #4 < and }
@@ -3633,9 +3701,7 @@ FUNCTION {output.number.index}
          bst.number.index.pre * index int.to.str$ *
          bst.number.index.post * "}\hskip0.5em " * write$
        }
-       { #0 'amsrefs.cnt :=
-         amsrefs.register
-         amsrefs.edit
+       { amsrefs.edit
          newline$
          "{\let\protect\noexpand\let~\relax" write$ newline$
          "\amsrefregist{" cite$ * "}{" * amsrefs.edited * "}}%" * write$ newline$
