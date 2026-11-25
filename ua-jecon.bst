@@ -37,6 +37,8 @@
 %     bst.thebibliography.begin (\amsrefregist), punctuation (.bbl footer)
 %
 % [History of ua-jecon.bst]
+% - v0.7.2 (2026/11/25): Point the .bbl header to the latest ua-jecon (CTAN/GitHub) instead of
+%   the original jecon.bst page.
 % - v0.7.1 (2026/11/16): Add LPPL maintenance status and copyright notices for CTAN release;
 %   replace the original author's bug-report address with this project's issue tracker
 %   (LPPL 1.3c clause 6c). No functional change.
@@ -95,7 +97,7 @@
 
 % version 指定
 FUNCTION {jecon.version} { "6.2.1" }
-FUNCTION {ua-jecon.version} { "0.7.1" }
+FUNCTION {ua-jecon.version} { "0.7.2" }
 
 % Debug mode．0 以外を指定すると様々な情報を表示させることが可能．
 FUNCTION {jecon.debug}
@@ -5294,9 +5296,10 @@ FUNCTION{punctuation}
   "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"	write$ newline$
   "%"									 								write$ newline$
   "%  This bbl file is created by ua-jecon.bst ver." ua-jecon.version *	write$ newline$
-  "%  a modified version of jecon.bst ver." jecon.version * 			write$ newline$
-  "%  The latest jecon.bst is available at"				 				write$ newline$
-  "%  <http://shirotakeda.org/ja/tex-ja/jecon-ja.html>"		   			write$ newline$
+  "%  (a derived work of jecon.bst ver." jecon.version * " by Shiro Takeda)." * write$ newline$
+  "%  The latest ua-jecon is available at"								write$ newline$
+  "%  <https://ctan.org/pkg/ua-jecon>"									write$ newline$
+  "%  <https://github.com/ryoya9826/ua-jecon>"							write$ newline$
   "%"									 								write$ newline$
   "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"	write$ newline$
   newline$
