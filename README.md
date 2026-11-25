@@ -3,7 +3,7 @@
 An extended BibTeX style for economics (`ua-jecon.bst`) and its wrapper package (`ua-jecon.sty`).
 
 - Author / Maintainer: Ryoya Ando — <https://ryoya9826.github.io/>
-- Version: 0.7.1 (2026-11-16)
+- Version: 0.7.2 (2026-11-25)
 - License: LaTeX Project Public License (LPPL), version 1.3c or later
 - CTAN: <https://ctan.org/pkg/ua-jecon>
 - Repository: <https://github.com/ryoya9826/ua-jecon>
@@ -142,6 +142,7 @@ Citing a reference in the text: \cite{example_key}, \acite{example_key}.
 
 ## 変更履歴
 
+- Version 0.7.2 (2026-11-25): `.bbl` 冒頭のコメントで，本家 `jecon.bst` ではなく `ua-jecon` の最新版の入手先（CTAN・GitHub）を案内するように変更．
 - Version 0.7.1 (2026-11-16): `\acite` の直前に余分な空白が入る不具合を修正．未定義ラベルの警告を追加．CTAN 公開に向けたライセンス表記の整備．サンプル文献ファイルを `ua-jecon-example.bib` に改名．
 - Version 0.7 (2026-04-21): 重複エントリへの `a,b` 付与，`label` フィールドの追加，`number.index` フォーマットの調整．パッケージとして提供 (`ua-jecon.sty`)．
 - Version 0.6 (2026-04-07): `ua-jecon.version` 変数の修正，`\harvarditem` コメントの typo 修正．
