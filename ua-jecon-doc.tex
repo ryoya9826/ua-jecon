@@ -111,6 +111,9 @@ Also you can use \acite{example_key}.
 一方，本スタイルでは \textbf{\texttt{amsrefs} パッケージ風のラベル}（例: 著者が Ando， 発行年が2026年であるエントリを \verb|[And26]| と出力する形式）も利用可能です．
 このラベルは \texttt{ua-jecon.bst} が自動生成して \texttt{.aux} ファイルに書き込むため，ユーザーが手動でラベルを定義する必要はありません．
 
+ラベルは，著者（または編者）が1人のときは姓の先頭3文字，複数のときは各人の姓の頭文字を並べ，発行年の下2桁を続けたものです．
+アクセント付き文字は，UTF-8 で直接書いても，\verb|{\"o}| や \verb|{\L}| のように \TeX 記法で書いても，1文字として数えます．
+
 本文中でこの圧縮ラベルを出力するには，\texttt{ua-jecon.sty} で標準提供されている \verb|\acite| コマンドを使用します．
 （\verb|\acite{キー}*{Thm.~1}| のように記述することで，定理番号などの追記も可能です）
 
@@ -123,6 +126,8 @@ Also you can use \acite{example_key}.
 \item arXiv の引用テスト \acite{arxiv_test2024}．
 \item \texttt{etranslator} の引用テスト \acite{noname1986}．
 \item \texttt{label} の引用テスト \acite{label_test2024}．
+\item アクセント付き文字（UTF-8）の引用テスト \acite{mueller2020}．
+\item アクセント付き文字（\TeX 記法）の引用テスト \acite{los2021}．
 \end{itemize}
 
 \bibliography{ua-jecon-example}
@@ -130,7 +135,7 @@ Also you can use \acite{example_key}.
 \section{更新履歴}
 
 \begin{description}
-\item[Version 0.7.2 (2026-11-25)] \texttt{.bbl} 冒頭のコメントで，本家 \texttt{jecon.bst} ではなく \texttt{ua-jecon} の最新版の入手先（CTAN・GitHub）を案内するように変更．
+\item[Version 0.7.2 (2026-11-25)] \texttt{.bbl} 冒頭のコメントで，本家 \texttt{jecon.bst} ではなく \texttt{ua-jecon} の最新版の入手先（CTAN・GitHub）を案内するように変更．圧縮ラベルを文字単位で生成するように変更し，アクセント付き文字や \verb|{\"o}| のような \TeX 記法を含む著者名でも先頭3文字が正しく取り出されるように修正．
 \item[Version 0.7.1 (2026-11-16)] \verb|\acite| の直前に余分な空白が入る不具合を修正．未定義ラベルの警告を追加．CTAN 公開に向けたライセンス表記の整備．サンプル文献ファイルを \texttt{ua-jecon-example.bib} に改名．
 \item[Version 0.7 (2026-04-21)] 重複エントリへの \texttt{a,b} 付与，\texttt{label} フィールドの追加，\texttt{number.index} フォーマットの調整．
 \item[Version 0.6 (2026-04-07)] \texttt{ua-jecon.version} 変数の修正，\verb|\harvarditem| コメントの typo 修正．
